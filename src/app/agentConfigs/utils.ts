@@ -26,7 +26,10 @@ export function injectTransferTools(agentDefs: AgentConfig[]): AgentConfig[] {
   Calls escalate to a more specialized LLM agent or to a human agent, with additional context. 
   Only call this function if one of the available agents is appropriate. Don't transfer to your own agent type.
   
-  Let the user know you're about to transfer them before doing so.
+  When transferring:
+  1. Inform the user about the transfer
+  2. Include the original request and context in the transfer
+  3. The receiving agent should continue the conversation without greeting or asking for repeat questions
   
   Available Agents:
   ${availableAgentsList}
@@ -40,20 +43,24 @@ export function injectTransferTools(agentDefs: AgentConfig[]): AgentConfig[] {
             },
             conversation_context: {
               type: "string",
-              description:
-                "Relevant context from the conversation that will help the recipient perform the correct action.",
+              description: "The complete context including the user's original request and any relevant details that will help the receiving agent continue the conversation without asking for repeats.",
             },
             destination_agent: {
               type: "string",
-              description:
-                "The more specialized destination_agent that should handle the user’s intended request.",
+              description: "The more specialized destination_agent that should handle the user's intended request.",
               enum: downstreamAgents.map((dAgent) => dAgent.name),
             },
+            suppress_greeting: {
+              type: "boolean",
+              description: "Set to true to prevent the receiving agent from sending an initial greeting.",
+              default: true
+            }
           },
           required: [
             "rationale_for_transfer",
             "conversation_context",
             "destination_agent",
+            "suppress_greeting"
           ],
         },
       };

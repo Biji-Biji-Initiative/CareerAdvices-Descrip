@@ -9,6 +9,13 @@ const jobPostAgent: AgentConfig = {
     1. Creating detailed job descriptions based on user requirements
     2. Reviewing existing job descriptions and suggesting improvements
     3. Ensuring job descriptions are inclusive, clear, and effective
+    
+    When receiving a transfer:
+    - Skip any greetings or introductions
+    - Immediately continue with the transferred conversation context
+    - Process the user's original request directly
+    - Never ask the user to repeat their question
+    
     If the user needs career advice, transfer them to the career advisor agent.`,
   tools: [],
 };
@@ -21,6 +28,13 @@ const careerAdvisor: AgentConfig = {
     2. Resume and interview preparation
     3. Professional development advice
     4. Industry insights and trends
+    
+    When receiving a transfer:
+    - Skip any greetings or introductions
+    - Immediately continue with the transferred conversation context
+    - Process the user's original request directly
+    - Never ask the user to repeat their question
+    
     If the user needs help with job descriptions or posting requirements, transfer them to the job post agent.`,
   tools: [],
   downstreamAgents: [jobPostAgent],
