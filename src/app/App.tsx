@@ -25,7 +25,9 @@ import { createRealtimeConnection } from "./lib/realtimeConnection";
 // Agent configs
 import { allAgentSets, defaultAgentSetKey } from "@/app/agentConfigs";
 
-function App() {
+// ChatHub: Main interactive interface that serves as the central hub for all chat interactions,
+// including transcript display, events panel, and real-time communication features
+function ChatHub() {
   const searchParams = useSearchParams();
 
   const { transcriptItems, addTranscriptMessage, addTranscriptBreadcrumb } =
@@ -514,4 +516,4 @@ function App() {
   );
 }
 
-export default App;
+export default ChatHub;
