@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/components/Providers";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -9,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Realtime API Agents",
-  description: "A demo app from OpenAI.",
+  title: "Mereka - Career Advice Platform",
+  description: "Get personalized career advice and guidance from industry experts.",
 };
 
 export default function RootLayout({
@@ -20,42 +21,47 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/images/sbfd7rdikurnwbifsggp.webp" />
-      </head>
-      <body className={`${poppins.className} antialiased bg-white text-gray-900`}>
-        <header className="sticky top-0 z-50 border-b border-gray-100 header-gradient">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center h-20">
-              <div className="flex items-center gap-4 hover:opacity-90 transition-opacity cursor-pointer">
-                <img 
-                  src="/images/sbfd7rdikurnwbifsggp.webp" 
-                  alt="Organization Logo" 
-                  className="h-16 w-auto"
-                />
-                <span className="text-4xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600">
-                  mereka
-                </span>
+      <body className={`${poppins.className} antialiased bg-white`}>
+        <Providers>
+          <header className="sticky top-0 z-50 header-gradient">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between h-16">
+                <div className="flex items-center gap-2">
+                  <img 
+                    src="https://cdn.brandfetch.io/idP99DVbZ3/theme/dark/logo.svg" 
+                    alt="Mereka Logo" 
+                    className="h-8 w-auto invert brightness-0"
+                  />
+                </div>
+                <nav className="hidden md:flex items-center gap-8">
+                  <a href="/" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">
+                    Home
+                  </a>
+                  <a href="/about" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">
+                    About
+                  </a>
+                  <a href="/contact" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">
+                    Contact
+                  </a>
+                </nav>
               </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        <main className="flex-grow">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="container-shadow bg-white rounded-xl p-6">
+          <main className="flex-grow">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
               {children}
             </div>
-          </div>
-        </main>
+          </main>
 
-        <footer className="border-t border-gray-100 py-8 mt-auto">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center text-sm text-gray-500">
-              © {new Date().getFullYear()} Mereka. All rights reserved.
+          <footer className="bg-gray-50 border-t border-gray-100 mt-auto">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div className="text-center text-sm text-gray-500">
+                © {new Date().getFullYear()} Mereka. All rights reserved.
+              </div>
             </div>
-          </div>
-        </footer>
+          </footer>
+        </Providers>
       </body>
     </html>
   );
