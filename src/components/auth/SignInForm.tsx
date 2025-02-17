@@ -15,10 +15,12 @@ export function AuthPortalSignIn() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [socialLoading, setSocialLoading] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setSuccessMessage(null)
     setIsLoading(true)
 
     try {
@@ -30,8 +32,12 @@ export function AuthPortalSignIn() {
       if (signInError) throw signInError
 
       if (data.session) {
-        router.push('/') // Redirect to chat page after successful sign in
-        router.refresh()
+        setSuccessMessage('Successfully signed in!')
+        setTimeout(() => {
+          setSuccessMessage(null)
+          router.push('/') // Redirect to chat page after successful sign in
+          router.refresh()
+        }, 450) // Very quick popup duration
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred')
@@ -132,12 +138,30 @@ export function AuthPortalSignIn() {
         </div>
 
         {error && (
-          <div className={`text-sm rounded-md px-4 py-3 ${
-            error.includes('Check your email') 
-              ? 'text-green-600 bg-green-50' 
-              : 'text-red-600 bg-red-50'
-          }`}>
+          <div className="text-sm rounded-md px-4 py-3 text-red-600 bg-red-50">
             {error}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300"></div>
+            <div className="relative bg-white rounded-lg px-8 py-6 shadow-xl transform transition-all duration-300 animate-in fade-in zoom-in">
+              <div className="flex items-center space-x-2">
+                <svg 
+                  className="h-6 w-6 text-black" 
+                  fill="none" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="2" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span className="text-black font-medium">{successMessage}</span>
+              </div>
+            </div>
           </div>
         )}
 
