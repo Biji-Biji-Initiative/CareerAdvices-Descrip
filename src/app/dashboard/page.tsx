@@ -1,11 +1,10 @@
 import React from "react";
-import { AuthPortalSignIn } from "@/components/auth/SignInForm";
 import { TranscriptProvider } from "@/app/contexts/TranscriptContext";
 import { EventProvider } from "@/app/contexts/EventContext";
-import ChatHub from "./App";
+import ChatHub from "../App";
 import Image from "next/image";
 
-export default function Page() {
+export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-white">
       <header className="fixed top-0 left-0 right-0 bg-[#111111] p-4 flex justify-between items-center z-50">
@@ -27,22 +26,13 @@ export default function Page() {
         </nav>
       </header>
 
-      <main className="flex min-h-screen items-center justify-center pt-16">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-sm">
-          <div className="mb-8 text-center">
-            <Image src="/logo.png" alt="Mereka Logo" width={48} height={48} className="mx-auto mb-4" />
-            <h2 className="text-2xl font-semibold text-gray-900">Welcome back</h2>
-            <p className="text-sm text-gray-600 mt-2">Sign in to access personalized career advice</p>
-          </div>
-          <AuthPortalSignIn />
-          <p className="mt-6 text-center text-sm text-gray-600">
-            New to Mereka?{' '}
-            <a href="/signup" className="font-medium text-gray-900 hover:text-gray-700">
-              Create an account
-            </a>
-          </p>
-        </div>
+      <main className="pt-16 h-screen">
+        <TranscriptProvider>
+          <EventProvider>
+            <ChatHub />
+          </EventProvider>
+        </TranscriptProvider>
       </main>
     </div>
   );
-}
+} 

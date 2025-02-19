@@ -33,11 +33,8 @@ export function AuthPortalSignIn() {
 
       if (data.session) {
         setSuccessMessage('Successfully signed in!')
-        setTimeout(() => {
-          setSuccessMessage(null)
-          router.push('/') // Redirect to chat page after successful sign in
-          router.refresh()
-        }, 450) // Very quick popup duration
+        // Redirect to dashboard
+        router.push('/dashboard')
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred')
@@ -52,7 +49,7 @@ export function AuthPortalSignIn() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/dashboard`,
         },
       })
       if (error) throw error
@@ -75,7 +72,6 @@ export function AuthPortalSignIn() {
       })
       if (error) throw error
       
-      // Show success message
       setError('Check your email for the password reset link')
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred')
