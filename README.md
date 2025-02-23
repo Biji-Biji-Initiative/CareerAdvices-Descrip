@@ -16,21 +16,35 @@ The platform serves two main purposes:
 - Resume building tips
 - Interview preparation resources
 - Career path recommendations
+- Real-time chat support
+- AI-powered career recommendations
 
 ### For Employers
 - Job posting management
 - Candidate profile viewing
 - Application tracking
 - Analytics and reporting
+- Real-time notifications
+- Custom job description templates
 
-## Getting Started
+## Tech Stack
 
-### Prerequisites
-- Node.js (v14 or higher)
+- Next.js 15.1.4
+- React 19
+- Supabase for authentication and real-time features
+- OpenAI integration for AI-powered recommendations
+- TailwindCSS for styling
+- TypeScript for type safety
+- Framer Motion for animations
+
+## Prerequisites
+
+- Node.js (v20 or higher)
 - Git
-- Database system (specify which one)
+- Supabase account
+- OpenAI API key (for AI features)
 
-### Installation
+## Installation
 
 1. Clone the repository
 ```bash
@@ -47,23 +61,36 @@ npm install
 cp .env.example .env
 ```
 
-4. Start the application
+4. Set up your environment variables in `.env`:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `OPENAI_API_KEY`
+- Other required environment variables as specified in `.env.example`
+
+5. Start the development server
 ```bash
-npm start
+npm run dev
 ```
 
 ## Project Structure
 ```
-├── src/
-│   ├── components/     # UI components
-│   ├── pages/         # Page routes
-│   ├── services/      # Business logic
-│   ├── models/        # Data models
-│   └── utils/         # Helper functions
-├── public/            # Static assets
-├── tests/            # Test files
-└── docs/             # Documentation
+├── src/              # Source code
+│   ├── components/   # Reusable UI components
+│   ├── pages/        # Next.js pages and API routes
+│   ├── styles/       # Global styles and Tailwind config
+│   └── utils/        # Helper functions and utilities
+├── public/           # Static assets
+├── .next/            # Next.js build output
+├── node_modules/     # Dependencies
+└── docs/            # Documentation
 ```
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm start` - Start production server
+- `npm run lint` - Run ESLint
 
 ## Contributing
 
@@ -90,3 +117,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Biji-Biji Initiative team members
 - Contributors and supporters
 - Open source community
+- Supabase team for the excellent real-time and auth features
+- OpenAI for AI capabilities
