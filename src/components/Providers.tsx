@@ -1,11 +1,14 @@
 'use client'
 
 import { AuthProvider } from '@/contexts/AuthContext'
+import { FirebaseProvider } from '@/contexts/FirebaseContext'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <AuthProvider>
-      {children}
-    </AuthProvider>
+    <FirebaseProvider>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </FirebaseProvider>
   )
 } 
