@@ -38,3 +38,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 todo.md
+
+# Firebase
+*-firebase-adminsdk-*.json
+firebase-service-account.json
