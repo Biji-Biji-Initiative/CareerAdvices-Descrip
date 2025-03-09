@@ -12,6 +12,7 @@ export interface UseHandleServerEventParams {
   sendClientEvent: (eventObj: any, eventNameSuffix?: string) => void;
   setSelectedAgentName: (name: string) => void;
   shouldForceResponse?: boolean;
+  onGeneratedContent?: (content: any) => void;
 }
 
 export function useHandleServerEvent({
@@ -20,6 +21,7 @@ export function useHandleServerEvent({
   selectedAgentConfigSet,
   sendClientEvent,
   setSelectedAgentName,
+  onGeneratedContent,
 }: UseHandleServerEventParams) {
   const {
     transcriptItems,
@@ -42,6 +44,10 @@ export function useHandleServerEvent({
     );
 
     addTranscriptBreadcrumb(`function call: ${functionCallParams.name}`, args);
+
+    if (["createJobPosting", "matchTrainer", "generateContract"].includes(functionCallParams.name)) {
+      onGeneratedContent?.(args);
+    }
 
     if (currentAgent?.toolLogic?.[functionCallParams.name]) {
       const fn = currentAgent.toolLogic[functionCallParams.name];
