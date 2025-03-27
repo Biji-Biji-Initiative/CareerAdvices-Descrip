@@ -131,7 +131,6 @@ Types: feat, fix, docs, style, refactor, test, chore
 
 ## 📞 Contact & Support
 
-- **Project Lead**: Habib (habib@mereka.io)
 - **Organization**: Biji-Biji Initiative
 - **Repository**: [CareerAdvices-Descrip](https://github.com/Biji-Biji-Initiative/CareerAdvices-Descrip)
 - **Issues**: Please use GitHub Issues
