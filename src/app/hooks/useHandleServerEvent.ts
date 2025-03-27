@@ -45,7 +45,7 @@ export function useHandleServerEvent({
 
     addTranscriptBreadcrumb(`function call: ${functionCallParams.name}`, args);
 
-    if (["createJobPosting", "matchTrainer", "generateContract"].includes(functionCallParams.name)) {
+    if (["createJobPosting", "matchTrainer", "generateContract", "displayMatchedTrainers"].includes(functionCallParams.name)) {
       onGeneratedContent?.(args);
     }
 

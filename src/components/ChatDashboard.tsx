@@ -61,6 +61,10 @@ export function ChatDashboard() {
   const [isPTTUserSpeaking, setIsPTTUserSpeaking] = useState<boolean>(false);
   const [isAudioPlaybackEnabled, setIsAudioPlaybackEnabled] = useState<boolean>(true);
 
+  // New state variables
+  const [activeView, setActiveView] = useState<'jobs' | 'talents'>('jobs');
+  const [sortBy, setSortBy] = useState<'matchScore' | 'experience' | 'rating'>('matchScore');
+
   // Load saved preferences
   useEffect(() => {
     const storedPTT = localStorage.getItem("pushToTalkUI");
@@ -817,66 +821,188 @@ export function ChatDashboard() {
 
           {/* Generated Listing - Right */}
           <Card className="col-span-12 lg:col-span-4 flex flex-col overflow-hidden">
-            <div className="p-4 border-b flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Generated Listing</h2>
-              {generatedContent && (
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsJsonPreviewOpen(true)}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    Preview
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      const blob = new Blob([JSON.stringify(generatedContent, null, 2)], { type: 'application/json' });
-                      const url = URL.createObjectURL(blob);
-                      const a = document.createElement('a');
-                      a.href = url;
-                      a.download = 'generated-content.json';
-                      document.body.appendChild(a);
-                      a.click();
-                      document.body.removeChild(a);
-                      URL.revokeObjectURL(url);
-                    }}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                  </Button>
-                </div>
-              )}
-            </div>
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
-                {generatedContent ? (
-                  <div className="relative">
-                    <pre className="bg-gray-50 rounded-lg p-4 overflow-x-auto text-sm">
-                      {JSON.stringify(generatedContent, null, 2)}
-                    </pre>
+            <div className="p-6 border-b">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold">Generated Listing</h2>
+                {generatedContent && (
+                  <div className="flex gap-2">
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
-                      className="absolute top-2 right-2 opacity-60 hover:opacity-100"
+                      onClick={() => setIsJsonPreviewOpen(true)}
+                      className="hover:bg-gray-50"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      Preview
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => {
-                        navigator.clipboard.writeText(JSON.stringify(generatedContent, null, 2));
+                        const blob = new Blob([JSON.stringify(generatedContent, null, 2)], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'generated-content.json';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
                       }}
+                      className="hover:bg-gray-50"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                       </svg>
                     </Button>
                   </div>
+                )}
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="relative flex-1">
+                  <select
+                    className="w-full appearance-none bg-white border border-gray-200 rounded-lg py-2.5 px-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-300 transition-colors cursor-pointer"
+                    onChange={(e) => setActiveView(e.target.value as 'jobs' | 'talents')}
+                    value={activeView}
+                  >
+                    <option value="jobs">Job Postings</option>
+                    <option value="talents">Matched Talents</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+                {activeView === 'talents' && (
+                  <div className="relative flex-1">
+                    <select
+                      className="w-full appearance-none bg-white border border-gray-200 rounded-lg py-2.5 px-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-300 transition-colors cursor-pointer"
+                      onChange={(e) => setSortBy(e.target.value as 'matchScore' | 'experience' | 'rating')}
+                      value={sortBy}
+                    >
+                      <option value="matchScore">Sort by Match Score</option>
+                      <option value="experience">Sort by Experience</option>
+                      <option value="rating">Sort by Rating</option>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <ScrollArea className="flex-1">
+              <div className="p-6 space-y-6">
+                {generatedContent ? (
+                  <div className="relative">
+                    {activeView === 'jobs' ? (
+                      // Job Postings View
+                      <div className="space-y-4">
+                        <pre className="bg-gray-50 rounded-lg p-4 overflow-x-auto text-sm">
+                          {JSON.stringify(generatedContent, null, 2)}
+                        </pre>
+                      </div>
+                    ) : (
+                      // Matched Talents View
+                      <div className="space-y-6">
+                        {Array.isArray(generatedContent.matchedTrainers) ? (
+                          generatedContent.matchedTrainers.map((trainer: any, index: number) => (
+                            <div 
+                              key={trainer.trainerId || index} 
+                              className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-colors"
+                            >
+                              <div className="flex justify-between items-start mb-4">
+                                <div>
+                                  <h3 className="font-semibold text-lg text-gray-900">{trainer.profile.fullName}</h3>
+                                  <p className="text-gray-600 mt-1">{trainer.profile.currentTitle}</p>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <span className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+                                    Match: {trainer.matchScore}/10
+                                  </span>
+                                  {trainer.profile.verificationStatus && (
+                                    <span className="text-green-600 bg-green-50 p-1.5 rounded-full">
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                      </svg>
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="space-y-4">
+                                <div className="flex items-center text-sm text-gray-600">
+                                  <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  </svg>
+                                  {trainer.profile.location}
+                                </div>
+                                <div>
+                                  <h4 className="text-sm font-medium text-gray-900 mb-2">Skills & Expertise</h4>
+                                  <div className="flex flex-wrap gap-2">
+                                    {trainer.profile.relevantSkills?.map((skill: string, idx: number) => (
+                                      <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                                        {skill}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                                {trainer.profile.trainingHistory && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-900 mb-2">Recent Trainings</h4>
+                                    <div className="space-y-2 bg-gray-50 rounded-lg p-3">
+                                      {trainer.profile.trainingHistory.slice(0, 3).map((training: any, idx: number) => (
+                                        <div key={idx} className="flex justify-between items-center text-sm">
+                                          <span className="text-gray-700">{training.title}</span>
+                                          <span className="flex items-center text-yellow-600 font-medium">
+                                            <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            {training.rating.toFixed(1)}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                <div className="mt-4 pt-4 border-t">
+                                  <h4 className="text-sm font-medium text-gray-900 mb-2">Match Analysis</h4>
+                                  <p className="text-sm text-gray-600">
+                                    {trainer.matchReasoning}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center py-8">
+                            <div className="text-gray-400 mb-3">
+                              <svg className="h-12 w-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                              </svg>
+                            </div>
+                            <p className="text-gray-500 text-sm">No matched talents found</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 ) : (
-                  <div className="text-center text-gray-500 py-8">
-                    No generated content yet. Start a conversation with an agent to generate structured output.
+                  <div className="text-center py-12">
+                    <div className="text-gray-400 mb-4">
+                      <svg className="h-16 w-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    </div>
+                    <p className="text-gray-500 text-sm">
+                      No generated content yet. Start a conversation with an agent to generate structured output.
+                    </p>
                   </div>
                 )}
               </div>
