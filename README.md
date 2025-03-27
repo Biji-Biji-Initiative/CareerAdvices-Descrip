@@ -1,6 +1,7 @@
 # Career Advice & Job Description Platform
 
 A comprehensive platform designed to provide career guidance and manage job descriptions, developed by Biji-Biji Initiative. This platform aims to bridge the gap between job seekers and employers while offering valuable career development resources.
+Feel free to check the "Demo" file for screenshots & demo Video of the project! (It just needs the Open Ai tokens and everything would run perfectly!)
 
 ## 🚀 Quick Start
 
